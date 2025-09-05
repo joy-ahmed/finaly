@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   IconCreditCard,
@@ -6,13 +6,14 @@ import {
   IconLogout,
   IconNotification,
   IconUserCircle,
-} from "@tabler/icons-react"
+} from "@tabler/icons-react";
 
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "@/components/ui/avatar"
+} from "@/components/ui/avatar";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,24 +22,26 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
+
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/sidebar"
-import { clearTokens } from "@/api/axios"
+} from "@/components/ui/sidebar";
+
+import { clearTokens } from "@/api/axios";
 
 export function NavUser({
   user,
 }: {
   user: {
-    username: string
-    email: string
-  }
+    username: string;
+    email: string;
+  };
 }) {
-  const { isMobile } = useSidebar()
+  const { isMobile } = useSidebar();
 
   return (
     <SidebarMenu>
@@ -47,73 +50,73 @@ export function NavUser({
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              className="data-[state=open]:bg-gray-700  hover:bg-gray-700 rounded-md w-full px-2 py-1.5 flex items-center gap-2"
             >
               <Avatar className="h-8 w-8 rounded-lg grayscale">
                 <AvatarImage src={user.username} alt={user.username} />
                 <AvatarFallback className="rounded-lg text-bold uppercase">
-                    {user?.username?.charAt(0) ?? "U"}
-                </AvatarFallback>   
+                  {user?.username?.charAt(0) ?? "U"}
+                </AvatarFallback>
               </Avatar>
-              <div className="grid flex-1 text-left text-sm leading-tight">
+              <div className="grid flex-1 text-left text-sm leading-tight ml-2">
                 <span className="truncate font-medium text-white">{user.username}</span>
-                <span className="text-muted-foreground truncate text-xs">
-                  {user.email}
-                </span>
+                <span className="text-gray-400 truncate text-xs">{user.email}</span>
               </div>
-              <IconDotsVertical className="ml-auto size-4" />
+              <IconDotsVertical className="ml-auto size-4 text-gray-400" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
+
           <DropdownMenuContent
-            className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+            className="min-w-[220px] bg-gray-800 border border-gray-700 rounded-lg shadow-lg p-1"
             side={isMobile ? "bottom" : "right"}
             align="end"
             sideOffset={4}
           >
             <DropdownMenuLabel className="p-0 font-normal">
-              <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+              <div className="flex items-center gap-2 px-2 py-2 text-left">
                 <Avatar className="h-8 w-8 rounded-lg">
                   <AvatarImage src={user.username} alt={user.username} />
-                    <AvatarFallback className="rounded-lg text-bold uppercase">
-                        {user?.username?.charAt(0) ?? "U"}
-                    </AvatarFallback>
+                  <AvatarFallback className="rounded-lg text-bold uppercase">
+                    {user?.username?.charAt(0) ?? "U"}
+                  </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{user.username}</span>
-                  <span className="text-muted-foreground truncate text-xs">
-                    {user.email}
-                  </span>
+                  <span className="truncate font-medium text-white">{user.username}</span>
+                  <span className="text-gray-400 truncate text-xs">{user.email}</span>
                 </div>
               </div>
             </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <IconUserCircle />
-                Account
+
+            <DropdownMenuSeparator className="border-gray-700" />
+
+            <DropdownMenuGroup className="text-gray-200">
+              <DropdownMenuItem className="hover:bg-gray-700 rounded-md flex items-center gap-2 px-2 py-1.5">
+                <IconUserCircle /> Account
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <IconCreditCard />
-                Billing
+              <DropdownMenuItem className="hover:bg-gray-700 rounded-md flex items-center gap-2 px-2 py-1.5">
+                <IconCreditCard /> Billing
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <IconNotification />
-                Notifications
+              <DropdownMenuItem className="hover:bg-gray-700 rounded-md flex items-center gap-2 px-2 py-1.5">
+                <IconNotification /> Notifications
               </DropdownMenuItem>
             </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-destructive" onSelect={() => {
-                // Handle log out
+
+            <DropdownMenuSeparator className="border-gray-700" />
+
+            <DropdownMenuItem
+              className="text-red-500 hover:bg-gray-700 rounded-md flex items-center gap-2 px-2 py-1.5"
+              onSelect={() => {
                 clearTokens();
                 window.location.reload();
-            }}>
-              <IconLogout />
-              Log out
+              }}
+            >
+              <IconLogout /> Log out
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>
-  )
+  );
 }
+
 export default NavUser;

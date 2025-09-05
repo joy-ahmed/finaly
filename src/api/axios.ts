@@ -157,7 +157,7 @@ const clearTokens = () => {
 
 // --- Axios Instance ---
 const api = axios.create({
-  baseURL: "https://fcs-api.onrender.com/api",
+  baseURL: "http://localhost:8000/api",
   timeout: 15000,
 });
 
@@ -261,6 +261,27 @@ return res.data;
 
 export const deleteAccount = async (id: number): Promise<void> => {
 await api.delete(`/accounts/${id}/`);
+};
+
+
+// ---------------- User Existence Check ----------------
+export const checkUserExists = async (
+  username?: string,
+  email?: string
+): Promise<boolean> => {
+  try {
+    const params: Record<string, string> = {};
+    if (username) params.username = username;
+    if (email) params.email = email;
+
+    const res = await api.get<{ exists: boolean }>("/auth/check-user/", { params });
+    // Backend should return { exists: true/false }
+    return res.data.exists;
+  } catch (err) {
+    // If endpoint fails, assume user does not exist to avoid blocking registration
+    console.error("Error checking user existence:", err);
+    return false;
+  }
 };
 
 // ---------------- Categories CRUD ----------------

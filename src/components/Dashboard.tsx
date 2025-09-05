@@ -17,9 +17,13 @@ const Dashboard = () => {
       </div>
 
       {/* Top Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-        <StatsCard />
-        <DailyLimit />
+      <div className="flex flex-col lg:flex-row gap-6">
+        <div className="basis-3/5">
+          <StatsCard className="h-full"/>
+        </div>
+        <div className="basis-2/5">
+          <DailyLimit className="h-full" />
+        </div>
       </div>
 
       {/* Middle Section */}

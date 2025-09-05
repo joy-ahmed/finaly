@@ -42,7 +42,7 @@ function App() {
       <SidebarProvider
         style={
           {
-            "--sidebar-width": "280px",
+            "--sidebar-width": "196px",
             "--sidebar-collapsed-width": "80px",
           } as React.CSSProperties
         }
@@ -55,7 +55,8 @@ function App() {
           <div className="flex-1 flex flex-col">
             {/* Mobile Header */}
             <div className="md:hidden flex justify-between items-center p-4 bg-gray-800 relative">
-              <h1 className="text-xl font-bold">Finlay</h1>
+              {/* import logo from asset  */}
+              <img src="/finaly.png" alt="Logo" className="h-8" />
               <SidebarTrigger className="absolute right-4 top-1/2 -translate-y-1/2 z-50" />
             </div>
 

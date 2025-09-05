@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export default function DailyLimit() {
+export default function DailyLimit({ className }: { className?: string }) {
   const { currentBudgets, refreshCurrentBudgets, getBudgetProgress } = useDataStore();
   const [loading, setLoading] = useState(true);
 
@@ -65,7 +65,7 @@ export default function DailyLimit() {
   const pct = totalLimit > 0 ? (totalSpent / totalLimit) * 100 : 0;
 
   return (
-    <Card className="col-span-1 bg-gray-800 text-white border-0">
+    <Card className={`col-span-1 bg-gray-800 text-white border-0 ${className}`}>
       <CardHeader>
         <CardTitle>Daily Limit</CardTitle>
       </CardHeader>
@@ -76,8 +76,8 @@ export default function DailyLimit() {
             {totalSpent.toFixed(2)} / {totalLimit.toFixed(2)}
           </span>
         </div>
-        <Progress value={pct} className="h-2 bg-gray-600" />
-        <div className="text-xs text-gray-400">
+        <Progress value={pct} className="h-2 bg-gray-600"  />
+        <div className="text-gray-400">
           {totalLeft >= 0
             ? `${totalLeft.toFixed(2)} left`
             : `${Math.abs(totalLeft).toFixed(2)} overspent`}
