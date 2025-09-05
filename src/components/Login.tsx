@@ -29,7 +29,7 @@ const Login = () => {
         draggable: true,
       });
 
-      window.location.href = "/dashboard"; // Full reload
+      window.location.href = "/"; // Full reload
     } catch (err) {
       setError("Invalid credentials. Please try again.");
       setLoading(false);
