@@ -157,7 +157,7 @@ const clearTokens = () => {
 
 // --- Axios Instance ---
 const api = axios.create({
-  baseURL: "http://127.0.0.1:8000/api",
+  baseURL: "https://fcs-api.onrender.com/api",
   timeout: 15000,
 });
 

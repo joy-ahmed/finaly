@@ -3,8 +3,8 @@ import DailyLimit from "./DailyLimit";
 import ExpensesSummary from "./ExpensesSummary";
 import Cards from "./Cards";
 import RecentActivity from "./RecentActivity";
-import { Button } from "@/components/ui/button"
 import { useAuthStore } from "@/stores/authStore";
+import { CreateTransactionDialog } from "./CreateTransactionDialog";
 
 const Dashboard = () => {
   const user = useAuthStore((state) => state.user);
@@ -13,9 +13,7 @@ const Dashboard = () => {
       {/* Header */}
       <div className="flex justify-between items-center flex-wrap gap-4">
         <h2 className="text-2xl font-semibold">Hello, {user?.username}</h2>
-        <Button className="bg-blue-600 px-4 py-2 rounded hover:bg-blue-500 cursor-pointer">
-          Add Transaction +
-        </Button>
+        <CreateTransactionDialog />
       </div>
 
       {/* Top Stats */}

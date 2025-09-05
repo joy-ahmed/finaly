@@ -205,6 +205,10 @@ export const useDataStore = create<DataState>((set, get) => ({
     addTransaction: async (payload) => {
         const created = await createTransactionApi(payload);
         set({ transactions: [created, ...get().transactions] }); // newest first
+        await get().refreshAccounts(); // update account balances
+        if (created.type === "expense") {
+            await get().refreshCurrentBudgets();
+        }
         return created;
     },
     editTransaction: async (id, payload) => {
@@ -257,25 +261,25 @@ export const useDataStore = create<DataState>((set, get) => ({
 
     // ✅ NEW: Calculate progress
     getBudgetProgress: (budgetId: number) => {
-        const budget = get().budgets.find((b) => b.id === budgetId);
-        if (!budget) {
-            return { spent: 0, limit: 0, left: 0, pct: 0 };
-        }
+  const budget = get().currentBudgets.find((b) => b.id === budgetId);
+  if (!budget) return { spent: 0, limit: 0, left: 0, pct: 0 };
 
-        // Handle category being either number or object
-        const categoryId =
-            typeof budget.category === "number" ? budget.category : budget.category.id;
+  const bCatId = typeof budget.category === "number" ? budget.category : budget.category.id;
 
-        const spent = get().transactions
-            .filter((t) => t.category === categoryId && t.type === "expense")
-            .reduce((sum, t) => sum + Number(t.amount), 0);
+  const spent = get().transactions
+    .filter((t) => {
+      if (t.type !== "expense") return false;
+      const tCatId = typeof t.category === "number" ? t.category : t.category.id;
+      return tCatId === bCatId;
+    })
+    .reduce((sum, t) => sum + parseFloat(t.amount), 0);
 
-        const limit = Number(budget.amount);
-        const left = limit - spent;
-        const pct = limit > 0 ? (spent / limit) * 100 : 0;
+  const limit = parseFloat(budget.amount as string);
+  const left = limit - spent;
+  const pct = limit > 0 ? (spent / limit) * 100 : 0;
 
-        return { spent, limit, left, pct };
-    },
+  return { spent, limit, left, pct };
+},
 
     // ---------- Goals ----------
     refreshGoals: async () => {
