@@ -70,6 +70,13 @@ interface DataState {
     replaceBudget: (id: number, payload: BudgetCreate) => Promise<Budget>;
     removeBudget: (id: number) => Promise<void>;
 
+    // ✅ NEW: Calculate progress
+    getBudgetProgress: (budgetId: number) => {
+        spent: number;
+        limit: number;
+        left: number;
+        pct: number;
+    };
 
     // Goals
     refreshGoals: () => Promise<void>;
@@ -246,6 +253,28 @@ export const useDataStore = create<DataState>((set, get) => ({
     removeBudget: async (id) => {
         await deleteBudget(id);
         set({ budgets: get().budgets.filter((b) => b.id !== id) });
+    },
+
+    // ✅ NEW: Calculate progress
+    getBudgetProgress: (budgetId: number) => {
+        const budget = get().budgets.find((b) => b.id === budgetId);
+        if (!budget) {
+            return { spent: 0, limit: 0, left: 0, pct: 0 };
+        }
+
+        // Handle category being either number or object
+        const categoryId =
+            typeof budget.category === "number" ? budget.category : budget.category.id;
+
+        const spent = get().transactions
+            .filter((t) => t.category === categoryId && t.type === "expense")
+            .reduce((sum, t) => sum + Number(t.amount), 0);
+
+        const limit = Number(budget.amount);
+        const left = limit - spent;
+        const pct = limit > 0 ? (spent / limit) * 100 : 0;
+
+        return { spent, limit, left, pct };
     },
 
     // ---------- Goals ----------

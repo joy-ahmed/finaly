@@ -1,16 +1,59 @@
+"use client";
+
+import { useEffect } from "react";
+import { useDataStore } from "@/stores/dataStore";
+import { Progress } from "@/components/ui/progress";
+import { BudgetDialog } from "./BudgetDialog";
+
+
 const DailyLimit = () => {
-  return (
-    <div className="bg-gray-800 rounded-lg p-6 col-span-1">
-      <h3 className="text-lg font-medium mb-2">Daily Limit</h3>
-      <p className="text-sm mb-4">
-        You're 75% through your budget. Review expenses to avoid overspending.
-      </p>
-      <div className="flex justify-between mb-2">
-        <span>Spent $150</span>
-        <span>Left $50</span>
+  const { budgets, refreshBudgets, getBudgetProgress } = useDataStore();
+
+  useEffect(() => {
+    refreshBudgets();
+  }, [refreshBudgets]);
+
+  if (!budgets.length) {
+    return (
+      <div className="bg-gray-800 rounded-lg p-6 space-y-4">
+        <h3 className="text-lg font-medium">Budgets</h3>
+        <p>No budgets yet.</p>
+        <BudgetDialog /> {/* ✅ still allow adding */}
       </div>
-      <div className="w-full bg-gray-700 rounded-full h-4">
-        <div className="bg-blue-500 h-4 rounded-full w-3/4"></div>
+    );
+  }
+
+  return (
+    <div className="bg-gray-800 rounded-lg p-6 space-y-4">
+      <div className="flex justify-between items-center">
+        <h3 className="text-lg font-medium">Budgets</h3>
+        <BudgetDialog /> {/* Add another budget if needed */}
+      </div>
+
+      <div className="space-y-6">
+        {budgets.map((budget) => {
+          const progress = getBudgetProgress(budget.id);
+
+          return (
+            <div key={budget.id} className="space-y-2">
+              <div className="flex justify-between">
+                <span className="font-medium">{budget.name}</span>
+                <span className="text-sm text-gray-400">
+                  {new Date(budget.month).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "short",
+                  })}
+                </span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span>Limit: {budget.amount}</span>
+                <span>Spent: {progress.spent}</span>
+                <span>Left: {progress.left}</span>
+              </div>
+              <Progress value={progress.pct} />
+            </div>
+          );
+        })}
       </div>
     </div>
   );
