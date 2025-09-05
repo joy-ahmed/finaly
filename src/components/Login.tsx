@@ -2,6 +2,7 @@ import { useState } from "react";
 import { LoaderCircle } from "lucide-react";
 import { login } from "../api/axios";
 import { useAuthStore } from "../stores/authStore";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -17,7 +18,18 @@ const Login = () => {
     try {
       const user = await login({ username, password });
       setUser(user);
-      window.location.href = "/dashboard";
+
+      // ✅ Show toast after successful login
+      toast.success(`Welcome back, ${user.username}!`, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+
+      window.location.href = "/dashboard"; // Full reload
     } catch (err) {
       setError("Invalid credentials. Please try again.");
       setLoading(false);

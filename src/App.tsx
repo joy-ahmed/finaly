@@ -7,6 +7,8 @@ import { useAuthStore } from "./stores/authStore";
 import { getMe, getAccessToken, clearTokens } from "./api/axios";
 import { SidebarProvider, SidebarTrigger } from "./components/ui/sidebar";
 import { AppSidebar } from "./components/app-sidebar";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -72,6 +74,7 @@ function App() {
           </div>
         </div>
       </SidebarProvider>
+      <ToastContainer />
     </Router>
   );
 }
